@@ -107,9 +107,7 @@ pesticide<-read.csv(file="C:/Rdata/midwest_soybean_pesticide_use.csv", header=TR
 # State	- US state, where
 #		IA= Iowa
 #		IL= Illinois
-#		IN= Indiana
 #		MI= Michigan
-#		MN= Minnesota
 #		WI= Wisconsin
 # Compound- Insecticide active ingredient
 # est_statewide_usage_kg- Statewide usage of this active 
@@ -122,6 +120,9 @@ pesticide<-read.csv(file="C:/Rdata/midwest_soybean_pesticide_use.csv", header=TR
 ######################################
 
 pesticide$rate_ha<-pesticide$est_statewide_usage_kg/pesticide$soy_planted_ha
+
+#remove states we were unable to get consistent scouting data for
+pesticide<-pesticide[which(pesticide$State=="IA" | pesticide$State=="IL"| pesticide$State=="MI"| pesticide$State=="WI" ),]
 #create data subsets for each active ingredient
 cyhalo<-pesticide[which(pesticide$Compound=="CYHALOTHRINLAMBDA"),]
 esfen<-pesticide[which(pesticide$Compound=="ESFENVALERATE"),]
@@ -129,8 +130,8 @@ imid<-pesticide[which(pesticide$Compound=="IMIDACLOPRID"),]
 thiam<-pesticide[which(pesticide$Compound=="THIAMETHOXAM"),]
 
 #choose colour and shape palettes
-pal1<-c(wes.palette(5, "Zissou"),(wes.palette(4, "Rushmore"))[4])
-shapepal<-c(15,16,17,18,19,8)
+pal1<-c((wes.palette(5, "Zissou"))[c(1, 3, 5)],(wes.palette(4, "Rushmore"))[4])
+shapepal<-c(15,17,19,8)
 
 #create base figure for legend
 pesticide.timeseries.leg<-ggplot(cyhalo, aes(Year, rate_ha, colour=State,shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab("Year")+ylab("kg active ingredient per hectare")+theme_bw()+ theme(legend.key = element_blank())+scale_shape_manual(values = shapepal)
