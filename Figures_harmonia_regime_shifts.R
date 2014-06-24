@@ -59,6 +59,21 @@ for (i in 1:(length(datahaxyraw$Year))) {
 }
 datahaxyraw$phase<-phase
 
+#phases for the lines that are to join time series points
+phasea = c()
+for (i in 1:(length(datahaxyraw$Year))) {
+  if(datahaxyraw$Year[i]<2001.1){
+    phasea = c(phasea, "A")
+  }
+  else if (datahaxyraw$Year[i]>2000& datahaxyraw$Year[i]<2006.1){
+    phasea = c(phasea, "B")
+  }
+  else if (datahaxyraw$Year[i]>2005.9){
+    phasea = c(phasea, "C")
+  }
+}
+datahaxyraw$phasea<-phasea
+
 #cut out last sampling year, because there is no Nt+1 for that year
 datahaxy<-datahaxyraw[which(datahaxyraw$Year<max(datahaxyraw$Year)),]
 
@@ -70,9 +85,9 @@ datahaxy$Nt1<-Nt1
 # Generate time series figure
 #
 ######################################
+pal<-wes.palette(3, "GrandBudapest")
 
-
-harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+geom_line(size=1)+xlab("Year")+ylab("Average captures per trap")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.5, 2005.5), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())
+harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase, cex=1))+geom_point(size=4)+scale_color_manual(values = pal)+geom_line(data=datahaxyraw, aes(x=Year, y=Nt, group=phasea), size=1)+geom_line(size=1)+xlab("Year")+ylab("Average captures per trap")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.9, 2005.9), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())
 harmonia.timeseries
 
 ######################################
@@ -85,7 +100,7 @@ phase.b<-function(x){x*exp(2.17*(1- x/0.47))}
 phase.c<-function(x){x*exp(1.54*(1- x/0.30))}
 phase.ac<-function(x){x*exp(1.47*(1- x/0.31))}
 
-pal<-wes.palette(3, "GrandBudapest")
+
 
 harmonia.ricker<-ggplot(datahaxy, aes(Nt, Nt1, colour=phase))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+xlab("N(t)")+ylab("N(t+1)")+theme_bw()+ theme(legend.key = element_blank())+stat_function(fun=phase.a, colour=pal[1], size=1)+stat_function(fun=phase.b, colour=pal[2], size=1)+stat_function(fun=phase.c, colour=pal[3], size=1)+stat_function(fun=phase.ac, colour="black", size=1, linetype="longdash")+coord_equal(ratio=1)
 harmonia.ricker
@@ -164,3 +179,44 @@ leg<-g_legend(pesticide.timeseries.leg)
 #stick plots together in a vertical stack with a legend on the right
 
 grid.arrange(arrangeGrob(arrangeGrob(cyhalo.timeseries, esfen.timeseries, imid.timeseries, thiam.timeseries, ncol=1),leg,ncol=2,widths=c(5/6,1/6), left="kg active ingredient per hectare") )
+
+######################################
+#
+# boxplot of pesticide use by aphid infestation level
+#
+######################################
+aphids<-read.csv(file="C:/Rdata/soybean_aphid_ratings_midwest.csv", header=TRUE, na.strings="")
+
+aphidmelt<-melt(aphids, id=1)
+names(aphidmelt)[names(aphidmelt)=="variable"]<-"Year"
+names(aphidmelt)[names(aphidmelt)=="State."]<-"State"
+aphidmelt$Year<-gsub("X","", aphidmelt$Year)
+aphidmelt<-aphidmelt[which(aphidmelt$Year<2012),]
+
+#merge infestation data with pesticide use data
+aphid.pest<-merge(pesticide, aphidmelt, by=c("Year","State"))
+names(aphid.pest)[names(aphid.pest)=="value"]<-"infestation"
+#cull out data from before 2005, when pesticides weren't widely used
+aphid.pest<-aphid.pest[which(aphid.pest$Year>2004),]
+
+
+aphid.pest$infestation<-factor(aphid.pest$infestation, levels=c("Low","Spotty","Moderate","High"))
+
+
+aphid.cyhalo<-aphid.pest[which(aphid.pest$Compound=="CYHALOTHRINLAMBDA"),]
+aphid.esfen<-aphid.pest[which(aphid.pest$Compound=="ESFENVALERATE"),]
+aphid.imid<-aphid.pest[which(aphid.pest$Compound=="IMIDACLOPRID"),]
+aphid.thiam<-aphid.pest[which(aphid.pest$Compound=="THIAMETHOXAM"),]
+
+#create new colour palatte
+pal2<-c(wes.palette(4, "Royal2"))
+
+#create plots of estimated pesticide use by aphid infestation
+cyhalo.boxplot<-ggplot(aphid.cyhalo, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Cyhalothrin-lambda")+theme_bw()+scale_fill_manual(values=pal2[1])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
+esfen.boxplot<-ggplot(aphid.esfen, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Esfenvalerate")+theme_bw()+scale_fill_manual(values=pal2[2])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
+imid.boxplot<-ggplot(aphid.imid, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Imidacloprid")+theme_bw()+scale_fill_manual(values=pal2[3])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
+thiam.boxplot<-ggplot(aphid.thiam, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Thiamethoxam")+theme_bw()+scale_fill_manual(values=pal2[4]) +stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
+#stack plots together
+
+grid.arrange(arrangeGrob(cyhalo.boxplot, esfen.boxplot, imid.boxplot, thiam.boxplot, ncol=2), left="kg active ingredient per hectare", sub="Aphid infestation")
+
