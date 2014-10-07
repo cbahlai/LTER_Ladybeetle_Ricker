@@ -101,8 +101,9 @@ phase.c<-function(x){x*exp(1.54*(1- x/0.30))}
 phase.ac<-function(x){x*exp(1.47*(1- x/0.31))}
 
 
-
-harmonia.ricker<-ggplot(datahaxy, aes(Nt, Nt1, colour=phase))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+xlab("N(t)")+ylab("N(t+1)")+theme_bw()+ theme(legend.key = element_blank())+stat_function(fun=phase.a, colour=pal[1], size=1)+stat_function(fun=phase.b, colour=pal[2], size=1)+stat_function(fun=phase.c, colour=pal[3], size=1)+stat_function(fun=phase.ac, colour="black", size=1, linetype="longdash")+coord_equal(ratio=1)
+axis.text.theme<-element_text(size=14)
+axis.title.theme<-element_text(face="bold", size=16)
+harmonia.ricker<-ggplot(datahaxy, aes(Nt, Nt1, colour=phase, label=Year))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+xlab("N(t)")+ylab("N(t+1)")+theme_bw()+ theme(legend.key = element_blank())+stat_function(fun=phase.a, colour=pal[1], size=1)+stat_function(fun=phase.b, colour=pal[2], size=1)+stat_function(fun=phase.c, colour=pal[3], size=1)+stat_function(fun=phase.ac, colour="black", size=1, linetype="longdash")+coord_equal(ratio=1)+geom_text(hjust=1.3, vjust=0, color="black")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 harmonia.ricker
 
 ######################################
