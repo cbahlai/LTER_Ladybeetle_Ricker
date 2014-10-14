@@ -6,9 +6,16 @@
 #first, Harmonia population data
 #pre-process data as it was used in analysis
 #read in raw data
-datahaxyweeklyunculled<-read.csv(file="C:/Rdata/harmoniaweekly.csv", header=TRUE, na.strings="")
+datahaxyweeklyunculled<-read.csv(file="https://raw.githubusercontent.com/cbahlai/LTER_Ladybeetle_Ricker/master/harmoniaweekly.csv", header=TRUE, na.strings="")
 
 #####################################
+# Data extracted from relational database based on 
+# http://lter.kbs.msu.edu/datatables/67
+# Only  observations of H. axyridis extracted
+# Extracted data summed over sampling week, total number
+# traps collected over that week from all treatments 
+# in original data set
+#
 #     variables and descriptions
 # Data has five columns
 #
@@ -109,6 +116,11 @@ harmonia.ricker
 ######################################
 #
 # Pesticide by state data
+#
+# Note: 
+# Pesticide data from Stone 2013, raw data obtained directly from Author
+# 
+# And are not republished here
 #
 ######################################
 
@@ -213,11 +225,11 @@ aphid.thiam<-aphid.pest[which(aphid.pest$Compound=="THIAMETHOXAM"),]
 pal2<-c(wes.palette(4, "Royal2"))
 
 #create plots of estimated pesticide use by aphid infestation
-cyhalo.boxplot<-ggplot(aphid.cyhalo, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Cyhalothrin-lambda")+theme_bw()+scale_fill_manual(values=pal2[1])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
-esfen.boxplot<-ggplot(aphid.esfen, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Esfenvalerate")+theme_bw()+scale_fill_manual(values=pal2[2])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
-imid.boxplot<-ggplot(aphid.imid, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Imidacloprid")+theme_bw()+scale_fill_manual(values=pal2[3])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
-thiam.boxplot<-ggplot(aphid.thiam, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Thiamethoxam")+theme_bw()+scale_fill_manual(values=pal2[4]) +stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")
+cyhalo.boxplot<-ggplot(aphid.cyhalo, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Cyhalothrin-lambda")+theme_bw()+scale_fill_manual(values=pal2[1])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+esfen.boxplot<-ggplot(aphid.esfen, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Esfenvalerate")+theme_bw()+scale_fill_manual(values=pal2[2])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+imid.boxplot<-ggplot(aphid.imid, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Imidacloprid")+theme_bw()+scale_fill_manual(values=pal2[3])+stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+thiam.boxplot<-ggplot(aphid.thiam, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Thiamethoxam")+theme_bw()+scale_fill_manual(values=pal2[4]) +stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 #stack plots together
 
-grid.arrange(arrangeGrob(cyhalo.boxplot, esfen.boxplot, imid.boxplot, thiam.boxplot, ncol=2), left="kg active ingredient per hectare", sub="Aphid infestation")
+grid.arrange(arrangeGrob(cyhalo.boxplot, esfen.boxplot, imid.boxplot, thiam.boxplot, ncol=2, widths=c(1,1), heights=c(1, 1, 1, 1), left=textGrob("\n kg active ingredient per hectare", gp=gpar(font=2), rot=90), sub=textGrob("\n Aphid infestation", gp=gpar(font=2), vjust=0)))
 

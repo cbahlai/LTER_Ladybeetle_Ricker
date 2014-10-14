@@ -5,9 +5,16 @@
 
 
 #read in raw data
-datahaxyweeklyunculled<-read.csv(file="C:/Rdata/harmoniaweekly.csv", header=TRUE, na.strings="")
+datahaxyweeklyunculled<-read.csv(file="https://raw.githubusercontent.com/cbahlai/LTER_Ladybeetle_Ricker/master/harmoniaweekly.csv", header=TRUE, na.strings="")
 
 #####################################
+# Data extracted from relational database based on 
+# http://lter.kbs.msu.edu/datatables/67
+# Only  observations of H. axyridis extracted
+# Extracted data summed over sampling week, total number
+# traps collected over that week from all treatments 
+# in original data set
+#
 #     variables and descriptions
 # Data has five columns
 #
