@@ -95,7 +95,7 @@ datahaxy$Nt1<-Nt1
 pal<-wes.palette(3, "GrandBudapest")
 axis.text.theme<-element_text(size=14)
 axis.title.theme<-element_text(face="bold", size=16)
-harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase, cex=1))+geom_point(size=4)+scale_color_manual(values = pal)+geom_line(data=datahaxyraw, aes(x=Year, y=Nt, group=phasea), size=1)+geom_line(size=1)+xlab("Year")+ylab("Average captures per trap")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.9, 2005.9), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase, cex=1))+geom_point(size=4)+scale_color_manual(values = pal)+geom_line(data=datahaxyraw, aes(x=Year, y=Nt, group=phasea), size=1)+geom_line(size=1)+xlab("\nYear")+ylab("\nAverage captures per trap\n")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.9, 2005.9), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 harmonia.timeseries
 
 ######################################
@@ -110,7 +110,7 @@ phase.ac<-function(x){x*exp(1.47*(1- x/0.31))}
 
 
 
-harmonia.ricker<-ggplot(datahaxy, aes(Nt, Nt1, colour=phase, label=Year))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+xlab("N(t)")+ylab("N(t+1)")+theme_bw()+ theme(legend.key = element_blank())+stat_function(fun=phase.a, colour=pal[1], size=1)+stat_function(fun=phase.b, colour=pal[2], size=1)+stat_function(fun=phase.c, colour=pal[3], size=1)+stat_function(fun=phase.ac, colour="black", size=1, linetype="longdash")+coord_equal(ratio=1)+geom_text(hjust=1.3, vjust=0, color="black")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+harmonia.ricker<-ggplot(datahaxy, aes(Nt, Nt1, colour=phase, label=Year))+geom_point(size=4)+scale_color_manual(values = wes.palette(3, "GrandBudapest"))+xlab("\nN(t)")+ylab("\nN(t+1)\n")+theme_bw()+ theme(legend.key = element_blank())+stat_function(fun=phase.a, colour=pal[1], size=1)+stat_function(fun=phase.b, colour=pal[2], size=1)+stat_function(fun=phase.c, colour=pal[3], size=1)+stat_function(fun=phase.ac, colour="black", size=1, linetype="longdash")+coord_equal(ratio=1)+geom_text(hjust=1.3, vjust=0, color="black")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 harmonia.ricker
 
 ######################################
@@ -160,18 +160,19 @@ thiam<-pesticide[which(pesticide$Compound=="THIAMETHOXAM"),]
 #choose colour and shape palettes
 pal1<-c((wes.palette(5, "Zissou"))[c(1, 3, 5)],(wes.palette(4, "Rushmore"))[4])
 shapepal<-c(15,17,19,8)
-
+require(scales)
 #create base figure for legend
 pesticide.timeseries.leg<-ggplot(cyhalo, aes(Year, rate_ha, colour=State,shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab("Year")+ylab("kg active ingredient per hectare")+theme_bw()+ theme(legend.key = element_blank())+scale_shape_manual(values = shapepal)+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 
 #plots for each individual active ingredient
-cyhalo.timeseries<-ggplot(cyhalo, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Cyhalothrin-lambda")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+cyhalo.timeseries<-ggplot(cyhalo, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Cyhalothrin-lambda")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)+scale_y_continuous(breaks=pretty_breaks(n=4))
 
-esfen.timeseries<-ggplot(esfen, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4) +scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Esfenvalerate")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+esfen.timeseries<-ggplot(esfen, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4) +scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Esfenvalerate")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)+scale_y_continuous(breaks=pretty_breaks(n=3), limits=c(0, 0.003))
 
-imid.timeseries<-ggplot(imid, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Imidacloprid")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+imid.timeseries<-ggplot(imid, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Imidacloprid")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)+scale_y_continuous(breaks=pretty_breaks(n=5))
 
-thiam.timeseries<-ggplot(thiam, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab("Year")+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Thiamethoxam")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+thiam.timeseries<-ggplot(thiam, aes(Year, rate_ha, colour=State, shape=State))+geom_point(size=4)+scale_color_manual(values = pal1)+geom_line(size=1)+xlab(NULL)+ylab(NULL)+theme_bw()+ theme(legend.position="none")+scale_shape_manual(values = shapepal)+geom_vline(xintercept=2005.5,colour="blue", linetype="longdash")+ggtitle("Thiamethoxam")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)+scale_y_continuous(breaks=pretty_breaks(n=5), limits=c(0, 0.015))
+
 
 
 ######################################
@@ -191,7 +192,7 @@ leg<-g_legend(pesticide.timeseries.leg)
 
 #stick plots together in a vertical stack with a legend on the right
 
-grid.arrange(arrangeGrob(arrangeGrob(cyhalo.timeseries, esfen.timeseries, imid.timeseries, thiam.timeseries, ncol=1),leg,ncol=2,widths=c(5/6,1/6), left=textGrob("kg active ingredient per hectare", rot=90, gp=gpar(fontsize=16, fontface="bold"))))
+grid.arrange(arrangeGrob(arrangeGrob(cyhalo.timeseries, esfen.timeseries, imid.timeseries, thiam.timeseries, ncol=1, heights=c(1,1,1,1)),leg,ncol=2,widths=c(5/6,1/6), left=textGrob("\nkg active ingredient per hectare\n", rot=90, gp=gpar(fontsize=16, fontface="bold")), sub=textGrob("\n Year              ", gp=gpar(fontsize=16, fontface="bold"), vjust=0)))
 
 ######################################
 #
@@ -231,5 +232,5 @@ imid.boxplot<-ggplot(aphid.imid, aes(x=infestation, y=rate_ha, fill=Compound))+g
 thiam.boxplot<-ggplot(aphid.thiam, aes(x=infestation, y=rate_ha, fill=Compound))+geom_boxplot()+xlab(NULL)+ylab(NULL)+ggtitle("Thiamethoxam")+theme_bw()+scale_fill_manual(values=pal2[4]) +stat_summary(fun.y=median, geom="line", aes(group=1), cex=1, linetype="longdash")+ theme(legend.position="none")+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
 #stack plots together
 
-grid.arrange(arrangeGrob(cyhalo.boxplot, esfen.boxplot, imid.boxplot, thiam.boxplot, ncol=2, widths=c(1,1), heights=c(1, 1, 1, 1), left=textGrob("\n kg active ingredient per hectare", gp=gpar(font=2), rot=90), sub=textGrob("\n Aphid infestation", gp=gpar(font=2), vjust=0)))
+grid.arrange(arrangeGrob(cyhalo.boxplot, esfen.boxplot, imid.boxplot, thiam.boxplot, ncol=2, widths=c(1,1), heights=c(1, 1, 1, 1), left=textGrob("\n kg active ingredient per hectare\n", gp=gpar(fontsize=16, fontface="bold"), rot=90), sub=textGrob("\n Aphid infestation", gp=gpar(fontsize=16, fontface="bold"), vjust=0)))
 
