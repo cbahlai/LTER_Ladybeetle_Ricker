@@ -95,7 +95,8 @@ datahaxy$Nt1<-Nt1
 pal<-wes.palette(3, "GrandBudapest")
 axis.text.theme<-element_text(size=14)
 axis.title.theme<-element_text(face="bold", size=16)
-harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase, cex=1))+geom_point(size=4)+scale_color_manual(values = pal)+geom_line(data=datahaxyraw, aes(x=Year, y=Nt, group=phasea), size=1)+geom_line(size=1)+xlab("\nYear")+ylab("\nAverage captures per trap\n")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.9, 2005.9), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+harmonia.timeseries<-ggplot(datahaxyraw, aes(Year, Nt, colour=phase, cex=1))+geom_point(size=4)+scale_color_manual(values = pal)+geom_line(data=datahaxyraw, aes(x=Year, y=Nt, group=phasea), size=1)+geom_line(size=1)+xlab("\nYear")+ylab("\nAverage captures per trap\n")+theme_bw()+coord_equal(ratio=8)+geom_vline(xintercept=c(2000.5, 2005.5), colour="blue", linetype="longdash")+ theme(legend.key = element_blank())+theme(axis.text=axis.text.theme, axis.title=axis.title.theme, legend.title=axis.title.theme, legend.text=axis.text.theme)
+
 harmonia.timeseries
 
 ######################################
